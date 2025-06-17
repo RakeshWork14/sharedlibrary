@@ -1,4 +1,4 @@
-import com.i27academy.builds.Docker_methods
+import com.i27academy.builds.Docker
 
 def call(Map pipelineParams){
     // An instance of the class clauculator is created

@@ -65,7 +65,7 @@ def call(Map pipelineParams) {
                     withSonarQubeEnv('sonar') {
                         sh """
                             mvn sonar:sonar \
-                                -Dsonar.projectKey=i27-eureka \
+                                -Dsonar.projectKey=i27-${Application_Name} \
                                 -Dsonar.host.url=${SONAR_URL} \
                                 -Dsonar.login=${SONAR_TOKEN}
                         """

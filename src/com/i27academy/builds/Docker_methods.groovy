@@ -1,5 +1,5 @@
 // we need to place all the methods in the src folder only
-package.com.i27academy.builds
+package com.i27academy.builds
 
 // all the methods
 class Docker{

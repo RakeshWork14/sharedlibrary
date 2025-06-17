@@ -25,6 +25,11 @@ def call(Map pipelineParams) {
 
         environment {
             Application_Name = "${pipelineParams.appName}"
+            DEV_HOST_PORT = "${pipelineParams.devPort}"
+            TEST_HOST_PORT = "${pipelineParams.testPort}"
+            STAGE_HOST_PORT = "${pipelineParams.stagePort}"
+            PROD_HOST_PORT = "${pipelineParams.prodPort}"
+            CONT_PORT = "${pipelineParams.contPort}"
             SONAR_TOKEN = credentials('sonar_creds')
             SONAR_URL = "http://34.55.133.80:9000/"
             POM_VERSION = readMavenPom().getVersion()
@@ -96,7 +101,7 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         imageValidation().call()
-                        dockerDeploy("dev", 5761, 8761).call()
+                        dockerDeploy("dev", "${env.DEV_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }
@@ -108,7 +113,7 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         imageValidation().call()
-                        dockerDeploy("test", 6761, 8761).call()
+                        dockerDeploy("test", "${env.TEST_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }
@@ -123,7 +128,7 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         imageValidation().call()
-                        dockerDeploy("stage", 7761, 8761).call()
+                        dockerDeploy("stage", "${env.STAGE_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }
@@ -140,7 +145,7 @@ def call(Map pipelineParams) {
                         input message: "Deploying to ${Application_Name} to Production??", ok: 'yes', submitter: 'rakesh'
                     }
                     script {
-                        dockerDeploy("prod", 8761, 8761).call()
+                        dockerDeploy("prod", "${env.PROD_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }

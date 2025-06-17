@@ -170,7 +170,7 @@ def imageValidation() {
             println("Image is pulled successfully")
         } catch (Exception e) {
             println("Oops the docker image with the tag is not available, so creating the new build and push")
-            docker.buildApp("${env.Application_Name}")
+            buildApp(env.Application_Name)
             dockerBuildAndPush().call()
         }
     }

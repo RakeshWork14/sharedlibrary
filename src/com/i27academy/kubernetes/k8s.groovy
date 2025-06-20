@@ -1,6 +1,6 @@
 package com.i27academy.kubernetes
 
-class k8s {
+class K8s {
     def jenkins
 
     k8s(jenkins) {

@@ -11,6 +11,9 @@ class K8s {
         jenkins.sh """
             echo "Authenticating to application Application"
             gcloud compute instances list
+            echo "Display k8's nodes"
+            gcloud container clusters get-credentials gke-1 --zone us-central1-a --project engaged-kite-460416-c1
+            kubectl get nodes
         """
     }
 }

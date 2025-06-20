@@ -1,4 +1,5 @@
 import com.i27academy.builds.Docker
+import com.i27academy.kubernetes.k8s
 
 def call(Map pipelineParams) {
     Docker docker = new Docker(this)
@@ -39,6 +40,12 @@ def call(Map pipelineParams) {
         }
 
         stages {
+            stage('Authentication'){
+                steps{
+                    echo "executing in gcp project"
+                    k8s.auth_login()
+                }
+            }
             stage('buildstage') {
                 when {
                     anyOf {
@@ -167,19 +174,7 @@ def dockerBuildAndPush() {
     }
 }
 
-def imageValidation() {
-    return {
-        println("Attempting to pull the Docker Image")
-        try {
-            sh "docker pull ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
-            println("Image is pulled successfully")
-        } catch (Exception e) {
-            println("Oops the docker image with the tag is not available, so creating the new build and push")
-            docker.buildApp(env.Application_Name)
-            dockerBuildAndPush().call()
-        }
-    }
-}
+
 
 def dockerDeploy(envDeploy, hostPort, contPort) {
     return {

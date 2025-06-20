@@ -7,11 +7,10 @@ class K8s {
         this.jenkins = jenkins
     }
 
-    def auth_login {
+    def auth_login() {
         jenkins.sh """
             echo "Authenticating to application Application"
             gcloud compute instances list
         """
     }
-
 }

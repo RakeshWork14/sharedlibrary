@@ -3,6 +3,7 @@ import com.i27academy.kubernetes.k8s
 
 def call(Map pipelineParams) {
     Docker docker = new Docker(this)
+    K8s k8s = new K8s(this)
 
     pipeline {
         agent {
@@ -43,7 +44,10 @@ def call(Map pipelineParams) {
             stage('Authentication'){
                 steps{
                     echo "executing in gcp project"
-                    k8s.auth_login()
+                    script{
+                        k8s.auth_login()
+                    }
+                    
                 }
             }
             stage('buildstage') {

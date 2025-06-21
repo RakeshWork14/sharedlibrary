@@ -38,9 +38,15 @@ def call(Map pipelineParams) {
             POM_PACKAGING = readMavenPom().getPackaging()
             DOCKER_HUB = "rakesh9182"
             DOCKER_CREDS = credentials('docker_creds')
-        }
+            K8S_DEV_FILE = "k8s_dev.yaml"
+            K8S_TEST_FILE = "k8s_test.yaml"
+            K8S_STAGE_FILE = "k8s_stage.yaml"
+            K8S_PROD_FILE = "k8s_prod.yaml"
 
+        }
+        
         stages {
+            // This stage will test the from Jenkins slev vm i am able to authenticate to kubernetes
             stage('Authentication'){
                 steps{
                     echo "executing in gcp project"
@@ -111,8 +117,12 @@ def call(Map pipelineParams) {
                 }
                 steps {
                     script {
+                        // passing the image during runtime using below command
+                        def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation().call()
-                        dockerDeploy("dev", "${env.DEV_HOST_PORT}", "${CONT_PORT}").call()
+                        k8s.k8sdeploy("${env.K8S_DEV_FILE}", docker_image)
+                        echo "Deployed to DEV successfully"
+                        //dockerDeploy("dev", "${env.DEV_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }
@@ -123,8 +133,12 @@ def call(Map pipelineParams) {
                 }
                 steps {
                     script {
+                        def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation().call()
-                        dockerDeploy("test", "${env.TEST_HOST_PORT}", "${CONT_PORT}").call()
+                        k8s.k8sdeploy("${env.K8S_TEST_FILE}", docker_image)
+                        echo "Deployed to TEST successfully"
+                        // BELOW LINE IS for docker deployment
+                        // dockerDeploy("test", "${env.TEST_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }
@@ -138,8 +152,11 @@ def call(Map pipelineParams) {
                 }
                 steps {
                     script {
+                        def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation().call()
-                        dockerDeploy("stage", "${env.STAGE_HOST_PORT}", "${CONT_PORT}").call()
+                        k8s.k8sdeploy("${env.K8S_STAGE_FILE}", docker_image)
+                        echo "Deployed to STAGE successfully"
+                        //dockerDeploy("stage", "${env.STAGE_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }
@@ -156,7 +173,11 @@ def call(Map pipelineParams) {
                         input message: "Deploying to ${Application_Name} to Production??", ok: 'yes', submitter: 'rakesh'
                     }
                     script {
-                        dockerDeploy("prod", "${env.PROD_HOST_PORT}", "${CONT_PORT}").call()
+                        // passing the image during runtime using below command
+                        def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
+                        k8s.k8sdeploy("${env.K8S_PROD_FILE}", docker_image)
+                        echo "Deployed to PROD successfully"
+                        // dockerDeploy("prod", "${env.PROD_HOST_PORT}", "${CONT_PORT}").call()
                     }
                 }
             }

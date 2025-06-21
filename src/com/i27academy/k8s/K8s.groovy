@@ -21,7 +21,7 @@ class K8s {
     }
 
     // Method to deploy the application
-    def k8sdeploy(fileName){
+    def k8sdeploy(fileName, docker_image){
         jenkins.sh """
         echo " *** Entering into kubernetes deployment Method ***"
         echo " List the files in the workspace"

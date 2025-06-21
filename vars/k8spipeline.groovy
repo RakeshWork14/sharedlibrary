@@ -120,11 +120,7 @@ def call(Map pipelineParams) {
                         // passing the image during runtime using below command
                         def docker_image= "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation().call()
-                        k8s.k8sdeploy([
-                        file : env.K8S_DEV_FILE.toString(),
-                        image: docker_image.toString()
-                        ])
-
+                        k8s.k8sdeploy("${env.K8S_DEV_FILE}", docker_image)
                         echo "Deployed to DEV successfully"
                         //dockerDeploy("dev", "${env.DEV_HOST_PORT}", "${CONT_PORT}").call()
                     }

@@ -198,6 +198,19 @@ def dockerBuildAndPush() {
         sh "docker push ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
     }
 }
+def imageValidation() {
+    return {
+        println("Attempting to pull the Docker Image")
+        try {
+            sh "docker pull ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
+            println("Image is pulled successfully")
+        } catch (Exception e) {
+            println("Oops the docker image with the tag is not available, so creating the new build and push")
+            docker.buildApp(env.Application_Name)
+            dockerBuildAndPush().call()
+        }
+    }
+}
 
 
 

@@ -27,7 +27,7 @@ class K8s {
         echo " List the files in the workspace"
         ls -la
         # below command will help to change the image name dynamically according to their git latest commit
-        sed -i "s|DIT||${docker_image}" ./.cicd/${fileName}
+        sed -i "s|DIT|${docker_image}" ./.cicd/${fileName}
         kubectl apply -f ./.cicd/${fileName}
         """
     }

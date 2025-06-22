@@ -119,7 +119,7 @@ def call(Map pipelineParams) {
                     script {
                         // passing the image during runtime using below command
                         def docker_image= "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
-                        imageValidation().call()
+                        imageValidation(docker).call()
                         k8s.k8sdeploy("${env.K8S_DEV_FILE}", docker_image)
                         echo "Deployed to DEV successfully"
                         //dockerDeploy("dev", "${env.DEV_HOST_PORT}", "${CONT_PORT}").call()
@@ -134,7 +134,7 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
-                        imageValidation().call()
+                        imageValidation(docker).call()
                         k8s.k8sdeploy("${env.K8S_TEST_FILE}", docker_image)
                         echo "Deployed to TEST successfully"
                         // BELOW LINE IS for docker deployment
@@ -153,7 +153,7 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
-                        imageValidation().call()
+                        imageValidation(docker).call()
                         k8s.k8sdeploy("${env.K8S_STAGE_FILE}", docker_image)
                         echo "Deployed to STAGE successfully"
                         //dockerDeploy("stage", "${env.STAGE_HOST_PORT}", "${CONT_PORT}").call()
@@ -198,7 +198,7 @@ def dockerBuildAndPush() {
         sh "docker push ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
     }
 }
-def imageValidation() {
+def imageValidation(docker) {
     return {
         println("Attempting to pull the Docker Image")
         try {

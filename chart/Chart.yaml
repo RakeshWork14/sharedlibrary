@@ -3,4 +3,4 @@ name: cart-chart
 description: A Helm chart for deploying a i27 cart application
 type: application
 version: 0.1.0 # Version of the chart
-appVersion: "1.0.0" # Version of the application
+appVersion: "1.16.0" # Version of the application

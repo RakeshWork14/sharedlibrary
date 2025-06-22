@@ -42,6 +42,10 @@ def call(Map pipelineParams) {
             K8S_TEST_FILE = "k8s_test.yaml"
             K8S_STAGE_FILE = "k8s_stage.yaml"
             K8S_PROD_FILE = "k8s_prod.yaml"
+            CART_DEV_NAMESPACE = "cart-dev-ns"
+            CART_TEST_NAMESPACE = "cart-test-ns"
+            CART_STAGE_NAMESPACE = "cart-stage-ns"
+            CART_PROD_NAMESPACE = "cart-prod-ns"
 
         }
         
@@ -120,7 +124,7 @@ def call(Map pipelineParams) {
                         // passing the image during runtime using below command
                         def docker_image= "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation(docker).call()
-                        k8s.k8sdeploy("${env.K8S_DEV_FILE}", docker_image)
+                        k8s.k8sdeploy("${env.K8S_DEV_FILE}", docker_image, "${env.CART_DEV_NAMESPACE}")
                         echo "Deployed to DEV successfully"
                         //dockerDeploy("dev", "${env.DEV_HOST_PORT}", "${CONT_PORT}").call()
                     }
@@ -135,7 +139,7 @@ def call(Map pipelineParams) {
                     script {
                         def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation(docker).call()
-                        k8s.k8sdeploy("${env.K8S_TEST_FILE}", docker_image)
+                        k8s.k8sdeploy("${env.K8S_TEST_FILE}", docker_image, "${env.CART_TEST_NAMESPACE}")
                         echo "Deployed to TEST successfully"
                         // BELOW LINE IS for docker deployment
                         // dockerDeploy("test", "${env.TEST_HOST_PORT}", "${CONT_PORT}").call()
@@ -154,7 +158,7 @@ def call(Map pipelineParams) {
                     script {
                         def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
                         imageValidation(docker).call()
-                        k8s.k8sdeploy("${env.K8S_STAGE_FILE}", docker_image)
+                        k8s.k8sdeploy("${env.K8S_STAGE_FILE}", docker_image, "${env.CART_STAGE_NAMESPACE}")
                         echo "Deployed to STAGE successfully"
                         //dockerDeploy("stage", "${env.STAGE_HOST_PORT}", "${CONT_PORT}").call()
                     }
@@ -175,7 +179,7 @@ def call(Map pipelineParams) {
                     script {
                         // passing the image during runtime using below command
                         def docker_image = "${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"
-                        k8s.k8sdeploy("${env.K8S_PROD_FILE}", docker_image)
+                        k8s.k8sdeploy("${env.K8S_PROD_FILE}", docker_image, "${env.CART_PROD_NAMESPACE}")
                         echo "Deployed to PROD successfully"
                         // dockerDeploy("prod", "${env.PROD_HOST_PORT}", "${CONT_PORT}").call()
                     }

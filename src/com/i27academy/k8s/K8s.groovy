@@ -21,14 +21,14 @@ class K8s {
     }
 
     // Method to deploy the application
-    def k8sdeploy(fileName, docker_image){
+    def k8sdeploy(fileName, docker_image, namespace){
         jenkins.sh """
         echo " *** Entering into kubernetes deployment Method ***"
         echo " List the files in the workspace"
         ls -la
         # below command will help to change the image name dynamically according to their git latest commit
         sed -i "s|DIT|${docker_image}|g" ./.cicd/${fileName}
-        kubectl apply -f ./.cicd/${fileName}
+        kubectl apply -f ./.cicd/${fileName} -n ${namespace}
         """
     }
 }

@@ -39,4 +39,13 @@ class K8s {
         helm install ${appName}-${env}-chart -f ./.cicd/helm_values/values_${env}.yaml --set image.key=${imageTag} ${helmChartPath}
         """
     }
+
+    // git clone method
+    def gitClone(){
+        jenkins.sh """
+        echo " *** Enterig into git clone method *** "
+        git clone -b main https://github.com/RakeshWork14/sharedlibrary.git
+        echo " *** Listing the files in the workspace *** "
+        """
+    }
 }

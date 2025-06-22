@@ -46,6 +46,7 @@ class K8s {
         echo " *** Enterig into git clone method *** "
         git clone -b main https://github.com/RakeshWork14/sharedlibrary.git
         echo " *** Listing the files in the workspace *** "
+        ls -la
         """
     }
 }

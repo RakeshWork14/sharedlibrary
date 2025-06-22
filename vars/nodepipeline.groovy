@@ -116,7 +116,7 @@ def dockerBuildAndPush() {
     return {
         echo "*** Building Docker image for React frontend ***"
         sh "pwd && ls -la"
-        sh "docker build -t ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT} ./.cicd"
+        sh "docker build -t ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT} ."
         echo "*** Pushing Docker image ***"
         sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
         sh "docker push ${env.DOCKER_HUB}/${env.Application_Name}:${GIT_COMMIT}"

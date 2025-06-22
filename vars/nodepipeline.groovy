@@ -25,16 +25,8 @@ def call(Map pipelineParams) {
             maven 'maven-8.8'
         }
 
-        environment {
+                environment {
             Application_Name = "${pipelineParams.appName}"
-            APP_TYPE = "${pipelineParams.appType}" 
-            DEV_HOST_PORT = "${pipelineParams.devPort}"
-            TEST_HOST_PORT = "${pipelineParams.testPort}"
-            STAGE_HOST_PORT = "${pipelineParams.stagePort}"
-            PROD_HOST_PORT = "${pipelineParams.prodPort}"
-            CONT_PORT = "${pipelineParams.contPort}"
-            SONAR_TOKEN = credentials('sonar_creds')
-            SONAR_URL = "http://34.55.133.80:9000/"
             DOCKER_HUB = "rakesh9182"
             DOCKER_CREDS = credentials('docker_creds')
             K8S_DEV_FILE = "k8s_dev.yaml"
@@ -45,8 +37,6 @@ def call(Map pipelineParams) {
             CART_TEST_NAMESPACE = "cart-test-ns"
             CART_STAGE_NAMESPACE = "cart-stage-ns"
             CART_PROD_NAMESPACE = "cart-prod-ns"
-            POM_VERSION = "${pipelineParams.appType == 'java' ? readMavenPom().getVersion() : ''}"
-            POM_PACKAGING = "${pipelineParams.appType == 'java' ? readMavenPom().getPackaging() : 'tar'}"
 
         }
         
@@ -61,49 +51,7 @@ def call(Map pipelineParams) {
                     
                 }
             }
-            stage('buildstage') {
-                when {
-                    anyOf {
-                        expression { params.buildOnly == 'yes' || params.dockerPush == 'yes' }
-                    }
-                }
-                steps {
-                    script {
-                        docker.buildApp("${env.Application_Name}")
-                    }
-                }
-            }
 
-            stage('sonarstage') {
-                when {
-                    anyOf {
-                        expression {
-                            params.scan == 'yes' || params.buildOnly == 'yes' || params.dockerPush == 'yes'
-                        }
-                    }
-                }
-                steps {
-                    echo "starting sonar scan"
-                    withSonarQubeEnv('sonar') {
-                        sh """
-                            mvn sonar:sonar \
-                                -Dsonar.projectKey=i27-eureka \
-                                -Dsonar.host.url=${SONAR_URL} \
-                                -Dsonar.login=${SONAR_TOKEN}
-                        """
-                    }
-                    timeout(time: 2, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-
-            stage('Displaying POM name') {
-                steps {
-                    echo "My Jar Source: i27-${env.Application_Name}-${env.POM_VERSION}.${env.POM_PACKAGING}"
-                    echo "Required display name: i27-${env.Application_Name}-${BUILD_NUMBER}-${BRANCH_NAME}.${env.POM_PACKAGING}"
-                }
-            }
 
             stage('Docker Build and push') {
                 when {

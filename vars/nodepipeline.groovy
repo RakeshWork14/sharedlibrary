@@ -35,8 +35,6 @@ def call(Map pipelineParams) {
             CONT_PORT = "${pipelineParams.contPort}"
             SONAR_TOKEN = credentials('sonar_creds')
             SONAR_URL = "http://34.55.133.80:9000/"
-            POM_VERSION = readMavenPom().getVersion()
-            POM_PACKAGING = readMavenPom().getPackaging()
             DOCKER_HUB = "rakesh9182"
             DOCKER_CREDS = credentials('docker_creds')
             K8S_DEV_FILE = "k8s_dev.yaml"

@@ -11,8 +11,8 @@ def call(Map pipelineParams) {
         }
 
         parameters {
-            choice(name: 'scan', choices: ['no', 'yes'], description: 'This will scan your application')
-            choice(name: 'buildOnly', choices: ['no', 'yes'], description: 'This will build your application')
+           // choice(name: 'scan', choices: ['no', 'yes'], description: 'This will scan your application')
+           // choice(name: 'buildOnly', choices: ['no', 'yes'], description: 'This will build your application')
             choice(name: 'dockerPush', choices: ['no', 'yes'], description: 'This will build docker image and push')
             choice(name: 'deployToDev', choices: ['no', 'yes'], description: 'This will deploy to DEV')
             choice(name: 'deployToTest', choices: ['no', 'yes'], description: 'This will deploy to Test')

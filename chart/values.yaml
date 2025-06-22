@@ -1,0 +1,10 @@
+fullname: dummy-name
+replicas:
+  default: 1
+image:
+  name: dummy-image
+  tag: dummy-tag
+targetPort: 8761
+service:
+  type: ClusterIP 
+# all the values here are overwrittern by individal values files coming from actual application

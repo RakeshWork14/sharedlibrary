@@ -31,4 +31,12 @@ class K8s {
         kubectl apply -f ./.cicd/${fileName} -n ${namespace}
         """
     }
+
+    // Helm Deployments
+    def k8sHelmChartDeploy(appName, env, helmChartPath, imageTag){
+        jenkins.sh """
+        helm version
+        helm install ${appName}-${env}-chart -f ./.cicd/helm_values/values_${env}.yaml --set image.key=${imageTag} ${helmChartPath}
+        """
+    }
 }

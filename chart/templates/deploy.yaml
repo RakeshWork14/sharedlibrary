@@ -1,0 +1,20 @@
+# Deployment file 
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: {{ .Values.fullname }}
+spec:
+  replicas: {{ .Values.replicas.default }}
+  selector:
+    matchLabels:
+        app: {{ .Values.fullname }}
+  template:
+    metadata:
+      labels:
+        app:  {{ .Values.fullname }}
+    spec:
+      imagePullSecrets:
+        - name: jfrog-docker-secret
+      containers:
+      - name:   {{ .Values.fullname }}
+        image: "{{ .Values.image.name}}:{{ .Values.image.tag }}" 

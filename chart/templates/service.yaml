@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service 
+metadata:
+  name: "{{ .Values.i27-eureka-dev }}-svc"
+spec:
+  selector: {{ .Values.fullname }}
+  ports:
+  - protocol: TCP
+    port: 80 # this is port on which service is running
+    targetPort: {{ .Values.targetPort }} # port where container is running
+  type: ClusterIP
+

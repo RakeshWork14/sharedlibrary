@@ -200,6 +200,14 @@ def call(Map pipelineParams) {
                     }
                 }
             }
+
+            stage ('clean') {
+                steps{
+                    echo "cleaning the workspace"
+                    // below command clean the folder after executing all steps, after running it will create again
+                    cleanWs()
+                }
+            }
         }
     }
 }

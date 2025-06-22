@@ -204,6 +204,7 @@ def call(Map pipelineParams) {
             stage ('clean') {
                 steps{
                     echo "cleaning the workspace"
+                    // this runs after running the every step including prod
                     // below command clean the folder after executing all steps, after running it will create again
                     cleanWs()
                 }
